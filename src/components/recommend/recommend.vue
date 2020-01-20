@@ -8,7 +8,7 @@
         <!-- 轮播图 -->
         <div class="slide-wrapper" v-if="banner.length">
           <Slider>
-            <div v-for="item in banner" :key="item.id">
+            <div v-for="item in banner" :key="item.id" @click.stop="selectBanner(item)">
               <img :src="item.imageUrl" />
             </div>
           </Slider>
@@ -64,6 +64,7 @@ import Slider from 'subcomponents/slider/slider'
 import { getBanner, getRecommendList, getRecommendMusic } from 'api/recommend'
 import { ERR_OK } from 'common/js/config'
 import {createRecommendSong} from 'common/js/song.js'
+import {getSongDetail} from 'api/search'
 export default {
   data() {
     return {
@@ -106,6 +107,29 @@ export default {
           this.recommendMusic = list
         }
       })
+    },
+    // 轮播图点击事件
+    selectBanner(item) {
+      console.log(item)
+      let regHttp = /^http/
+      let regSong = /\/song\?id/
+      if(regHttp.test(item.url)) {
+        window.open(item.url)
+      }
+      if(regSong.test(item.url)) {
+        getSongDetail(item.targetId).then((res)=>{
+          let m = res.data.songs[0]
+          let song = {
+            id: m.id,
+            singer: m.ar[0].name,
+            name: m.name,
+            image: m.al.picUrl,
+            album: m.al.name
+          }
+          this.inertSong(song)
+          this.setFullScreen(true)
+        })
+      }
     }
   },
   components: {

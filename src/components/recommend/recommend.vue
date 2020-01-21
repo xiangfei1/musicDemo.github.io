@@ -8,7 +8,11 @@
         <!-- 轮播图 -->
         <div class="slide-wrapper" v-if="banner.length">
           <Slider>
-            <div v-for="item in banner" :key="item.id" @click.stop="selectBanner(item)">
+            <div
+              v-for="item in banner"
+              :key="item.id"
+              @click.stop="selectBanner(item)"
+            >
               <img :src="item.imageUrl" />
             </div>
           </Slider>
@@ -19,7 +23,7 @@
           <ul>
             <li class="item" v-for="item in playlist" :key="item.id">
               <!-- 图片加阴影 -->
-              <div class="icon">
+              <div class="icon" @click="selectList(item)">
                 <!-- 图片上部阴影效果 -->
                 <div class="gradients"></div>
                 <!-- 图片 -->
@@ -45,7 +49,7 @@
           <ul>
             <li class="item" v-for="item in recommendMusic" :key="item.id">
               <div class="icon">
-                <img v-lazy="item.image"/>
+                <img v-lazy="item.image" />
               </div>
               <!-- 歌曲名称、及歌手名字 -->
               <p class="text">{{ item.name }}</p>
@@ -55,6 +59,7 @@
         </div>
       </div>
     </Scroll>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -63,8 +68,9 @@ import Scroll from 'subcomponents/scroll/scroll'
 import Slider from 'subcomponents/slider/slider'
 import { getBanner, getRecommendList, getRecommendMusic } from 'api/recommend'
 import { ERR_OK } from 'common/js/config'
-import {createRecommendSong} from 'common/js/song.js'
-import {getSongDetail} from 'api/search'
+import { createRecommendSong } from 'common/js/song.js'
+import { getSongDetail } from 'api/search'
+import { mapMutations } from 'vuex'
 export default {
   data() {
     return {
@@ -90,7 +96,7 @@ export default {
     },
     // 获取推荐歌单
     _getRecommendList() {
-      getRecommendList().then((res) => {
+      getRecommendList().then(res => {
         if (res.status === ERR_OK) {
           this.playlist = res.data.result
         }
@@ -98,9 +104,9 @@ export default {
     },
     // 获取推荐歌曲
     _getRecommendMusic() {
-      getRecommendMusic().then((res)=>{
-        if(res.status === ERR_OK) {
-          let list = res.data.result.map((item)=>{
+      getRecommendMusic().then(res => {
+        if (res.status === ERR_OK) {
+          let list = res.data.result.map(item => {
             return createRecommendSong(item)
           })
           list.splice(9)
@@ -113,11 +119,11 @@ export default {
       console.log(item)
       let regHttp = /^http/
       let regSong = /\/song\?id/
-      if(regHttp.test(item.url)) {
+      if (regHttp.test(item.url)) {
         window.open(item.url)
       }
-      if(regSong.test(item.url)) {
-        getSongDetail(item.targetId).then((res)=>{
+      if (regSong.test(item.url)) {
+        getSongDetail(item.targetId).then(res => {
           let m = res.data.songs[0]
           let song = {
             id: m.id,
@@ -130,12 +136,23 @@ export default {
           this.setFullScreen(true)
         })
       }
-    }
+    },
+    // 歌单点击事件
+    selectList(item) {
+      this.$router.push({
+        path: `/recommend/${item.id}`
+      })
+      // 将数据添加到vuex中
+      this.setMusicList(item)
+    },
+    ...mapMutations({
+    setMusicList: 'SET_MUSIC_LIST'  //将数据保存到Vuex中
+  })
   },
   components: {
     Scroll,
     Slider
-  }
+  },
 }
 </script>
 

@@ -1,0 +1,1 @@
+export const SET_MUSIC_LIST = 'SET_MUSIC_LIST'  //获取歌单列表

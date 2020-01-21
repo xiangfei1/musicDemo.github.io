@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import vueLazy from 'vue-lazyload'
+import store from './store'
 
 Vue.config.productionTip = false
 Vue.use(vueLazy, {
@@ -14,5 +15,6 @@ new Vue({
   el: '#app',
   router,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  store
 })

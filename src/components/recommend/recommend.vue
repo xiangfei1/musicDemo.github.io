@@ -232,6 +232,9 @@ export default {
           right: 8px;
           font-size: $font-size-small-s;
           color: $color-text-l;
+          .iconfont {
+            font-size: inherit;
+          }
         }
         .text {
           float: left;

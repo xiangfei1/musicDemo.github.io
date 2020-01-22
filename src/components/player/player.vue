@@ -7,7 +7,7 @@ export default {}
 </script>
 
 <style lang="scss">
-  // .player {
-  //   display: none;
-  // }
+  .player {
+    display: none;
+  }
 </style>

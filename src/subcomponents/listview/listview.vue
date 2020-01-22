@@ -203,7 +203,7 @@ export default {
   }
   .list-shortcut {
     position: absolute;
-    z-index: 30px;
+    z-index: 30;
     right: 3px;
     top: 50%;
     transform: translateY(-50%);

@@ -6,6 +6,7 @@ import Recommend from 'cpnts/recommend/recommend'
 import Singer from 'cpnts/singer/singer'
 import Rank from 'cpnts/rank/rank'
 import MusicList from 'cpnts/music-list/music-list'
+import RankDetail from 'cpnts/rank-detail/rank-detail'
 Vue.use(Router)
 
 export default new Router({
@@ -27,6 +28,7 @@ export default new Router({
     {
       path: '/recommend',
       component: Recommend,
+      name: 'Recommend',
       children: [
         {
           path: ':id',
@@ -37,7 +39,13 @@ export default new Router({
     {
       path: '/rank',
       name: 'Rank',
-      component: Rank
+      component: Rank,
+      children: [
+        {
+          path: ':id',
+          component: RankDetail
+        }
+      ]
     },
     {
       path: '/singer',

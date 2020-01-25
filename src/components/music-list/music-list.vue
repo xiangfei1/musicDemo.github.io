@@ -39,7 +39,7 @@
               <span class="count">(共{{ listDetail.length }}首)</span>
             </div>
             <!-- 歌曲列表 -->
-            <SongList :songs="listDetail"></SongList>
+            <SongList @select="selectItem" :songs="listDetail"></SongList>
           </div>
         </div>
       </Scroll>
@@ -49,11 +49,11 @@
 
 <script>
 import Scroll from 'subcomponents/scroll/scroll'
-import { mapGetters } from 'vuex'
+import SongList from 'subcomponents/song-list/song-list'
+import { mapGetters, mapActions } from 'vuex'
 import { getRecommendListDetail } from 'api/recommend'
 import { ERR_OK } from 'common/js/config'
 import { createRecommendListSong } from 'common/js/song'
-import SongList from 'subcomponents/song-list/song-list'
 export default {
   data() {
     return {
@@ -111,11 +111,19 @@ export default {
           alert('获取失败')
         }
       })
-    }
+    },
+    // 点击播放事件
+    selectItem(item, index) {
+      this.selectPlay({
+        list: this.listDetail,
+        index: index
+      })
+    },
+    ...mapActions(['selectPlay'])
   },
   components: {
-    Scroll,
-    SongList
+    SongList,
+    Scroll
   }
 }
 </script>

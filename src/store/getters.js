@@ -1,3 +1,5 @@
 export const musicList = state => state.musicList
 
-export const toplist = state => state.toplist
+export const topList = state => state.topList
+
+export const singer = state => state.singer

@@ -1,9 +1,9 @@
 <template>
   <div class="song-list">
     <ul>
-      <li class="item" v-for="(item,index) in songs" :key="item.id">
+      <li class="item" v-for="(item, index) in songs" :key="item.id" @click="selectItem(item,index)">
         <!-- 序号 -->
-        <p class="count">{{ index+1 }}</p>
+        <p class="count">{{ index + 1 }}</p>
         <!-- 歌曲名称及歌手名字 -->
         <div class="content">
           <h2 class="n">{{ item.name }}</h2>
@@ -16,20 +16,23 @@
 
 <script>
 export default {
-    props: {
-        songs: {
-            type: Array
-        }
-    },
-    methods: {
-        getDesc(song){
-            if(song.aliaName){
-                return `${song.singer}-${song.aliaName}`
-            } else {
-                return `${song.singer}`
-            }
-        }
+  props: {
+    songs: {
+      type: Array
     }
+  },
+  methods: {
+    selectItem(item, index) {
+      this.$emit('select', item, index)
+    },
+    getDesc(song) {
+      if (song.aliaName) {
+        return `${song.singer}-${song.aliaName}`
+      } else {
+        return `${song.singer}`
+      }
+    }
+  }
 }
 </script>
 

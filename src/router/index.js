@@ -7,6 +7,7 @@ import Singer from 'cpnts/singer/singer'
 import Rank from 'cpnts/rank/rank'
 import MusicList from 'cpnts/music-list/music-list'
 import RankDetail from 'cpnts/rank-detail/rank-detail'
+import SingerDetail from 'cpnts/singer-detail/singer-detail'
 Vue.use(Router)
 
 export default new Router({
@@ -50,7 +51,13 @@ export default new Router({
     {
       path: '/singer',
       name: 'Singer',
-      component: Singer
+      component: Singer,
+      children: [
+        {
+          path: ':id',
+          component: SingerDetail
+        }
+      ]
     }
   ]
 })

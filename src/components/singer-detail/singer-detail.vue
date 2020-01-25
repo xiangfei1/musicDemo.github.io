@@ -1,7 +1,7 @@
 <template>
-  <transition name="slide" mode="out-in">
+  <transition name="slide">
     <div class="music-list">
-      <!-- 标题 -->
+      <!-- 头部 -->
       <div class="header">
         <div class="back" @click="back">
           <i class="iconfont icon-back"></i>
@@ -10,32 +10,22 @@
           <h1 class="title">{{ headerTitle }}</h1>
         </div>
       </div>
-      <!-- 歌单列表 -->
-      <Scroll
-        class="list"
-        @scroll="scroll"
-        :listenScroll="listenScroll"
-        :probeType="probeType"
-      >
+      <!-- 歌手歌曲 -->
+      <Scroll class="list">
         <div class="music-list-wrapper">
-          <!-- 背景图片 -->
-          <div class="bg-image" :style="bgStyle" ref="bgImage">
+          <!-- 背景 -->
+          <div class="bg-image" :style="bgStyle">
             <div class="text">
-              <h2 class="list-title">
-                {{ headerTitleTouchDown }}
-              </h2>
-              <div class="update">{{ updateTime }}</div>
+              <h2 class="list-title">{{ headerTitleTouchDown }}</h2>
             </div>
           </div>
-          <!-- 歌单 -->
+          <!-- 歌曲 -->
           <div class="song-list-wrapper">
-            <!-- 播放按钮 -->
             <div class="sequence-play">
               <i class="iconfont icon-play"></i>
               <span class="text">播放全部</span>
               <span class="count">(共{{ listDetail.length }}首)</span>
             </div>
-            <!-- 歌单列表 -->
             <SongList :songs="listDetail"></SongList>
           </div>
         </div>
@@ -46,61 +36,65 @@
 
 <script>
 import Scroll from 'subcomponents/scroll/scroll'
-import { mapGetters } from 'vuex'
 import SongList from 'subcomponents/song-list/song-list'
+import { mapGetters } from 'vuex'
+import { getSingerDetail } from 'api/singer'
+import { ERR_OK } from 'common/js/config'
 import { createSong } from 'common/js/song'
 export default {
   data() {
     return {
       headerTitle: '歌手',
-      listDetail: [], //歌曲数组
-      scrollY: 0
+      listDetail: [], //歌手歌曲
+      node: null //中转变量
     }
   },
   created() {
-    if (!this.topList.id) {
-      this.$router.push('/rank')
-    }
-    this._normalizeSongs(this.topList.tracks)
-    this.listenScroll = true
-    this.probeType = 3
+    this._getSingerDetail()
   },
   computed: {
-    //   背景
     bgStyle() {
-      return `background-image: url(${this.topList.coverImgUrl})`
+      return `background-image: url(${this.singer.avatar})`
     },
-    // 歌单名
-    headerTitleTouchDown(){
-      return this.topList.name
+    headerTitleTouchDown() {
+      let name = ''
+      if (this.singer.aliaName) {
+        name = this.singer.name + `(${this.singer.aliaName})`
+      } else {
+        name = this.singer.name
+      }
+      return name
     },
-    // 更新时间
-    updateTime(){
-      let time = new Date(this.topList.updateTime)
-      let month = time.getMonth() + 1
-      let day = time.getDate()
-      return `最近更新:${month}月${day}日`
-    },
-    ...mapGetters(['topList'])
+    ...mapGetters(['singer'])
   },
   methods: {
     back() {
       this.$router.back()
     },
-    //将数据保存到listDetail中
-    _normalizeSongs(list) {
-      if (!this.topList.id) {
-        this.$router.push('/rank')
+    // 得到歌手的信息
+    _getSingerDetail() {
+      if (!this.singer.id) {
+        this.$router.push('/singer')
         return
       }
+      getSingerDetail(this.singer.id).then(res => {
+        if (res.status == ERR_OK) {
+          this.node = res.data.hotSongs
+        }
+      })
+    },
+    // 得到歌手歌曲数据
+    _normalizeSongs(list) {
       let ret = []
       list.forEach(item => {
         ret.push(createSong(item))
       })
-      this.listDetail = ret
-    },
-    scroll(pos) {
-      this.scrollY = pos.s
+      return ret
+    }
+  },
+  watch: {
+    node(val) {
+      this.listDetail = this._normalizeSongs(val)
     }
   },
   components: {
@@ -115,7 +109,7 @@ export default {
 @import 'common/scss/mixin.scss';
 .slide-enter-active,
 .slide-leave-active {
-  transition: all 0.2s;
+  transition: all 0.3s;
 }
 .slide-enter,
 .slide-leave-to {
@@ -124,11 +118,11 @@ export default {
 }
 .music-list {
   position: fixed;
-  z-index: 100;
   top: 0;
-  left: 0;
-  bottom: 0;
   right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
   background: $color-background;
   .header {
     position: fixed;
@@ -139,16 +133,16 @@ export default {
     z-index: 100;
     .back {
       position: absolute;
-      top: 5px;
-      left: 0;
+      top: 6px;
+      left: 4px;
       .iconfont {
-        padding: 5px 5px;
         font-size: 30px;
+        padding: 5px 5px;
       }
     }
     .text {
       position: absolute;
-      left: 38px;
+      left: 45px;
       line-height: 44px;
       font-size: $font-size-medium-x;
       @include no-wrap();
@@ -167,30 +161,22 @@ export default {
         height: 0;
         padding-top: 75%;
         transform-origin: top;
-        background-size: cover;
         background-position: 0 30%;
+        background-size: cover;
         .text {
           position: absolute;
           width: 80%;
           height: 40px;
-          bottom: 50px;
+          bottom: 40px;
           left: 20px;
           color: #fff;
           .list-title {
             position: absolute;
             bottom: 0;
-            font-style: italic;
-            font-size: $font-size-large;
+            font-size: 17px;
             line-height: 18px;
             font-weight: bold;
             letter-spacing: 1px;
-          }
-          .update {
-            position: absolute;
-            top: 45px;
-            left: 7px;
-            line-height: 14px;
-            font-size: $font-size-small;
           }
         }
       }
@@ -210,7 +196,7 @@ export default {
           padding-left: 16px;
           border-bottom: 1px solid rgb(228, 228, 228);
           .iconfont {
-            font-size: 26px;
+            font-size: 18px;
             color: $color-text;
             padding-right: 14px;
           }

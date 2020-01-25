@@ -6,7 +6,7 @@
     :probeType="probeType"
     @scroll="scroll"
   >
-    <!-- 歌曲列表 -->
+    <!-- 歌手列表 -->
     <ul>
       <li
         class="list-group"
@@ -14,7 +14,7 @@
         :key="group.id"
         ref="listgroup"
       >
-        <!-- 分类标题/歌曲 -->
+        <!-- 分类标题/歌手 -->
         <!-- 分类标题 -->
         <h2 class="list-group-title">{{ group.title }}</h2>
         <ul>
@@ -22,6 +22,7 @@
             class="list-group-item"
             v-for="item in group.items"
             :key="item.id"
+            @click="selectItem(item)"
           >
             <!-- 歌手图片 -->
             <img v-lazy="item.avatar" class="avatar" />
@@ -121,6 +122,10 @@ export default {
       //   console.log(index)
       this.scrollY = -this.listHeight[index]
       this.$refs.listview.scrollToElement(this.$refs.listgroup[index], 0)
+    },
+    // 向调用父组件的方法，并传递参数
+    selectItem(item) {
+      this.$emit('select',item)
     }
   },
   watch: {

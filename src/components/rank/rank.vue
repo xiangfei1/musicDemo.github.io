@@ -53,6 +53,7 @@ export default {
       this.$router.push({
         path: `/rank/${item.id}`
       })
+      // console.log(item)
       this.setTopList(item)
     },
     ...mapMutations({

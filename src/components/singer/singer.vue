@@ -1,7 +1,8 @@
 <template>
   <div class="singer" ref="singer">
-    <!-- 歌曲列表 -->
-    <listView :data="singers"></listView>
+    <!-- 歌手列表 -->
+    <listView :data="singers" @select="selectItem"></listView>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -9,6 +10,7 @@
 import listView from 'subcomponents/listview/listview'
 import { getSingers } from 'api/singer'
 import Singer from 'common/js/singer'
+import {mapMutations} from 'vuex'
 const pinyin = require('pinyin')
 const HOT_NAME = '热门'
 const HOT_SINGERS = 10
@@ -90,7 +92,18 @@ export default {
       })
       //连接两个数组
       return hot.concat(ret)
-    }
+    },
+    // 从子组件中获取数据，并将数据保存到vuex中
+    selectItem(singer){
+      this.$router.push({
+        path: `/singer/${singer.id}`
+      })
+      // console.log(singer)
+      this.setSinger(singer)
+    },
+    ...mapMutations({
+      setSinger: 'SET_SINGER'
+    })
   },
   components: {
     listView

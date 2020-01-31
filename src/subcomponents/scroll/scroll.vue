@@ -45,20 +45,20 @@ export default {
       type: Number,
       default: 20
     },
-    beforeScroll: {
-      type: Boolean,
-      default: true
-    }
+    // beforeScroll: {
+    //   type: Boolean,
+    //   default: true
+    // }
   },
   mounted() {
     //   保证在DOM渲染完毕后初始化better-scroll
     setTimeout(() => {
       this._initScroll()
-    }, 20)
+    })
   },
   methods: {
     _initScroll() {
-      if (!this.$refs.wrapper) return
+      if (!this.$refs.wrapper) {return}
       // better-scroll的初始化
       this.scroll = new Bscroll(this.$refs.wrapper, {
         probeType: this.probeType,

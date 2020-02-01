@@ -98,7 +98,6 @@ export default {
       this.$router.push({
         path: `/singer/${singer.id}`
       })
-      // console.log(singer)
       this.setSinger(singer)
     },
     ...mapMutations({

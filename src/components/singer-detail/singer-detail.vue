@@ -2,7 +2,7 @@
   <transition name="slide">
     <div class="music-list">
       <!-- 头部 -->
-      <div class="header">
+      <div class="header" ref="header">
         <div class="back" @click="back">
           <i class="iconfont icon-back"></i>
         </div>
@@ -11,22 +11,27 @@
         </div>
       </div>
       <!-- 歌手歌曲 -->
-      <Scroll class="list">
+      <Scroll
+        class="list"
+        @scroll="scroll"
+        :listenScroll="listenScroll"
+        :probeType="probeType"
+      >
         <div class="music-list-wrapper">
           <!-- 背景 -->
-          <div class="bg-image" :style="bgStyle">
+          <div class="bg-image" :style="bgStyle" ref="bgImage">
             <div class="text">
               <h2 class="list-title">{{ headerTitleTouchDown }}</h2>
             </div>
           </div>
           <!-- 歌曲 -->
           <div class="song-list-wrapper">
-            <div class="sequence-play">
+            <div class="sequence-play" @click="sequence">
               <i class="iconfont icon-play"></i>
               <span class="text">播放全部</span>
               <span class="count">(共{{ listDetail.length }}首)</span>
             </div>
-            <SongList :songs="listDetail"></SongList>
+            <SongList @select="selectItem" :songs="listDetail"></SongList>
           </div>
         </div>
       </Scroll>
@@ -37,7 +42,7 @@
 <script>
 import Scroll from 'subcomponents/scroll/scroll'
 import SongList from 'subcomponents/song-list/song-list'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { getSingerDetail } from 'api/singer'
 import { ERR_OK } from 'common/js/config'
 import { createSong } from 'common/js/song'
@@ -46,11 +51,17 @@ export default {
     return {
       headerTitle: '歌手',
       listDetail: [], //歌手歌曲
-      node: null //中转变量
+      node: null, //中转变量
+      scrollY: 0
     }
   },
   created() {
     this._getSingerDetail()
+    this.listenScroll = true
+    this.probeType = 3
+  },
+  mounted() {
+    this.imageHeight = this.$refs.bgImage.clientHeight
   },
   computed: {
     bgStyle() {
@@ -90,11 +101,39 @@ export default {
         ret.push(createSong(item))
       })
       return ret
-    }
+    },
+    // 播放全部歌曲
+    sequence() {
+      this.sequencePlay(this.listDetail)
+    },
+    // 播放歌曲
+    selectItem(item, index) {
+      this.selectPlay({
+        list: this.listDetail,
+        index: index
+      })
+    },
+    scroll(pos) {
+      this.scrollY = pos.y
+    },
+    ...mapActions(['sequencePlay', 'selectPlay'])
   },
   watch: {
     node(val) {
       this.listDetail = this._normalizeSongs(val)
+    },
+    scrollY(newY) {
+      let percent = Math.abs(newY / this.imageHeight)
+      if(newY < -170) {
+        this.headerTitle = this.headerTitleTouchDown
+      } else {
+        this.headerTitle = '歌手'
+      }
+      if(newY < 0) {
+        this.$refs.header.style.background = `rgba(212, 68, 57, ${percent})`
+      } else {
+        this.$refs.header.style.background = 'rgba(212, 68, 57, 0)'
+      }
     }
   },
   components: {

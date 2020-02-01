@@ -94,7 +94,7 @@
       <div class="mini-play" v-show="!fullScreen" @click.stop="open">
         <!-- 专辑图片 -->
         <div class="icon">
-          <img :src="currentSong.image" width="40" height="40" />
+          <img :class="cdCls" :src="currentSong.image" width="40" height="40" />
         </div>
         <!-- 歌曲名称、歌手名 -->
         <div class="text">
@@ -102,7 +102,11 @@
           <div class="desc">{{ currentSong.singer }}</div>
         </div>
         <!-- 播放按钮、及进度条 -->
-        <div class="control"></div>
+        <div class="control" @click.stop="togglePlaying">
+          <progressCircle :radius="radius" :percent="percent">
+            <i class="iconfont" :class="miniIcon"></i>
+          </progressCircle>
+        </div>
         <!-- 播放列表 -->
         <div class="control">
           <i></i>
@@ -128,6 +132,7 @@ import { getLyric, getSong } from 'api/song'
 import progressBar from 'subcomponents/progress-bar/progress-bar'
 import { playMode } from 'common/js/config'
 import { shuffle } from 'common/js/utl'
+import progressCircle from 'subcomponents/progress-circle/progress-circle'
 export default {
   data() {
     return {
@@ -139,7 +144,8 @@ export default {
       currentTime: 0, //歌曲进度时间
       duration: 0, //歌曲总时间
       percent: 0, //歌曲进度百分比
-      songReady: false //判断歌曲是否准备
+      songReady: false, //判断歌曲是否准备
+      radius: 32 //半径
     }
   },
   watch: {
@@ -198,6 +204,10 @@ export default {
     // 暂停cd的转动动画
     cdCls() {
       return this.playing ? 'play' : 'play pause' //play pause 保存之前的状态，如果只是设置为pause，则会从初始位置转动
+    },
+    // mini播放按钮样式
+    miniIcon() {
+      return this.playing ? 'icon-mini-play' : 'icon-mini-stop'
     },
     ...mapGetters([
       'playList',
@@ -413,7 +423,8 @@ export default {
   },
   components: {
     Scroll,
-    progressBar
+    progressBar,
+    progressCircle
   }
 }
 </script>
@@ -659,6 +670,12 @@ export default {
       padding: 0 10px 0 20px;
       img {
         border-radius: 50%;
+        &.play {
+          animation: rotate 10s linear infinite;
+        }
+        &.pause {
+          animation-play-state: paused;
+        }
       }
     }
     .text {
@@ -688,6 +705,25 @@ export default {
       flex: 0 0 30px;
       width: 30px;
       padding: 0 10px;
+      .iconfont {
+        position: relative;
+        left: -5px;
+        top: -3px;
+      }
+      .icon-mini-play {
+        color: $color-theme-d;
+        font-size: 22px;
+        position: absolute;
+        left: 6px;
+        top: 5px;
+      }
+      .icon-mini-stop {
+        color: $color-theme-d;
+        font-size: 18px;
+        position: absolute;
+        left: 7px;
+        top: 8px;
+      }
     }
   }
 }

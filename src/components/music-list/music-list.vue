@@ -33,7 +33,7 @@
           <!-- 歌单 -->
           <div class="song-list-wrapper">
             <!-- 播放按钮 -->
-            <div class="sequence-play">
+            <div class="sequence-play" @click="sequence">
               <i class="iconfont icon-play"></i>
               <span class="text">播放全部</span>
               <span class="count">(共{{ listDetail.length }}首)</span>
@@ -54,6 +54,7 @@ import { mapGetters, mapActions } from 'vuex'
 import { getRecommendListDetail } from 'api/recommend'
 import { ERR_OK } from 'common/js/config'
 import { createRecommendListSong } from 'common/js/song'
+const RESERVED_HEIGHT = 44
 export default {
   data() {
     return {
@@ -66,6 +67,9 @@ export default {
     this._getRecommendListDetail(this.musicList.id)
     this.listenScroll = true
     this.probeType = 3
+  },
+  mounted() {
+    this.imageHeight = this.$refs.bgImage.clientHeight //获取背景图片的高度
   },
   computed: {
     // 播放量
@@ -119,7 +123,26 @@ export default {
         index: index
       })
     },
-    ...mapActions(['selectPlay'])
+    sequence() {
+      let list = this.listDetail
+      this.sequencePlay(list)
+    },
+    ...mapActions(['selectPlay','sequencePlay'])
+  },
+  watch: {
+    scrollY(newY) {
+      let percent = Math.abs(newY / this.imageHeight)
+      if (newY < -170) {
+        this.headerTitle = this.musicList.name
+      } else {
+        this.headerTitle = '歌单'
+      }
+      if (newY < 0) {
+        this.$refs.header.style.background = `rgba(212, 68, 57, ${percent})`
+      } else {
+        this.$refs.header.style.background = 'rgba(212, 68, 57, 0)'
+      }
+    }
   },
   components: {
     SongList,

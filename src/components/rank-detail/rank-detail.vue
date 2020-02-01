@@ -2,7 +2,7 @@
   <transition name="slide" mode="out-in">
     <div class="music-list">
       <!-- 标题 -->
-      <div class="header">
+      <div class="header" ref="header">
         <div class="back" @click="back">
           <i class="iconfont icon-back"></i>
         </div>
@@ -30,13 +30,13 @@
           <!-- 歌单 -->
           <div class="song-list-wrapper">
             <!-- 播放按钮 -->
-            <div class="sequence-play">
+            <div class="sequence-play" @click="sequence">
               <i class="iconfont icon-play"></i>
               <span class="text">播放全部</span>
               <span class="count">(共{{ listDetail.length }}首)</span>
             </div>
             <!-- 歌单列表 -->
-            <SongList :songs="listDetail"></SongList>
+            <SongList @select="selectItem" :songs="listDetail"></SongList>
           </div>
         </div>
       </Scroll>
@@ -46,13 +46,13 @@
 
 <script>
 import Scroll from 'subcomponents/scroll/scroll'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex' 
 import SongList from 'subcomponents/song-list/song-list'
 import { createSong } from 'common/js/song'
 export default {
   data() {
     return {
-      headerTitle: '歌手',
+      headerTitle: '歌单',
       listDetail: [], //歌曲数组
       scrollY: 0
     }
@@ -65,17 +65,20 @@ export default {
     this.listenScroll = true
     this.probeType = 3
   },
+  mounted() {
+    this.imageHeight = this.$refs.bgImage.clientHeight
+  },
   computed: {
     //   背景
     bgStyle() {
       return `background-image: url(${this.topList.coverImgUrl})`
     },
     // 歌单名
-    headerTitleTouchDown(){
+    headerTitleTouchDown() {
       return this.topList.name
     },
     // 更新时间
-    updateTime(){
+    updateTime() {
       let time = new Date(this.topList.updateTime)
       let month = time.getMonth() + 1
       let day = time.getDate()
@@ -100,7 +103,37 @@ export default {
       this.listDetail = ret
     },
     scroll(pos) {
-      this.scrollY = pos.s
+      this.scrollY = pos.y
+    },
+    // 歌曲点击事件
+    selectItem(item,index) {
+      this.selectPlay({
+        list: this.listDetail,
+        index: index
+      })
+    },
+    // 播放全部歌曲
+    sequence() {
+      this.sequencePlay(this.listDetail)
+    },
+    ...mapActions([
+      'selectPlay',
+      'sequencePlay',
+    ])
+  },
+  watch: {
+    scrollY(newY) {
+      let percent = Math.abs(newY / this.imageHeight)
+      if(newY < -170) {
+        this.headerTitle = this.topList.name
+      } else {
+        this.headerTitle = '歌单'
+      }
+      if(newY < 0) {
+        this.$refs.header.style.background = `rgba(212, 68, 57, ${percent})`
+      } else {
+        this.$refs.header.style.background = 'rgba(212, 68, 57, 0)'
+      }
     }
   },
   components: {

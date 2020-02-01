@@ -47,7 +47,12 @@
         <div class="recommend-song">
           <h1 class="title">推荐歌曲</h1>
           <ul>
-            <li class="item" v-for="item in recommendMusic" :key="item.id">
+            <li
+              class="item"
+              v-for="item in recommendMusic"
+              @click="selectItem(item)"
+              :key="item.id"
+            >
               <div class="icon">
                 <img v-lazy="item.image" />
               </div>
@@ -70,7 +75,7 @@ import { getBanner, getRecommendList, getRecommendMusic } from 'api/recommend'
 import { ERR_OK } from 'common/js/config'
 import { createRecommendSong } from 'common/js/song.js'
 import { getSongDetail } from 'api/search'
-import { mapMutations } from 'vuex'
+import { mapMutations, mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -116,7 +121,6 @@ export default {
     },
     // 轮播图点击事件
     selectBanner(item) {
-      console.log(item)
       let regHttp = /^http/
       let regSong = /\/song\?id/
       if (regHttp.test(item.url)) {
@@ -145,14 +149,19 @@ export default {
       // 将数据添加到vuex中
       this.setMusicList(item)
     },
+    // 歌曲点击事件
+    selectItem(item) {
+      this.insertSong(item)
+    },
     ...mapMutations({
-    setMusicList: 'SET_MUSIC_LIST'  //将数据保存到Vuex中
-  })
+      setMusicList: 'SET_MUSIC_LIST' //将数据保存到Vuex中
+    }),
+    ...mapActions(['selectPlay','insertSong'])
   },
   components: {
     Scroll,
     Slider
-  },
+  }
 }
 </script>
 

@@ -1,7 +1,12 @@
 <template>
   <div class="song-list">
     <ul>
-      <li class="item" v-for="(item, index) in songs" :key="item.id" @click="selectItem(item,index)">
+      <li
+        class="item"
+        v-for="(item, index) in songs"
+        :key="item.id"
+        @click="selectItem(item, index)"
+      >
         <!-- 序号 -->
         <p class="count">{{ index + 1 }}</p>
         <!-- 歌曲名称及歌手名字 -->
@@ -57,7 +62,10 @@ export default {
   .content {
     flex: 1;
     line-height: 20px;
-    overflow: hidden;
+    .n {
+      @include no-wrap();
+      width: 80%;
+    }
     .name {
       margin-top: 4px;
       width: 80%;

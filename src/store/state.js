@@ -11,6 +11,7 @@ const state = {
     fullScreen: false,  //是否全屏
     playing: false, //播放
     playHistory: loadPlay(),    //获取播放缓存
+    favoriteList: {},   //喜欢的歌曲列表
 }
 
 export default state

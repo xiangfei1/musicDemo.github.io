@@ -126,7 +126,7 @@
 
 <script>
 import Lyric from 'lyric-parser'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import Scroll from 'subcomponents/scroll/scroll'
 import { getLyric, getSong } from 'api/song'
 import progressBar from 'subcomponents/progress-bar/progress-bar'
@@ -358,8 +358,9 @@ export default {
     },
     // 准备歌曲
     ready() {
+      // console.log(this.currentSong)
       this.songReady = true
-      this.setPlayHistory(this.currentSong)
+      this.savePlayHistory(this.currentSong)
     },
     // 歌曲结束事件操作
     end() {
@@ -409,16 +410,18 @@ export default {
     },
     // 打开播放页面
     open() {
-      console.log(this.currentSong)
+      // console.log(this.currentSong)
       this.setFullScreen(true)
     },
+    ...mapActions([
+      'savePlayHistory'
+    ]),
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING_STATE',
       setPlayMode: 'SET_PLAY_MODE',
       setPlayList: 'SET_PLAY_LIST',
       setCurrentIndex: 'SET_CURRENT_INDEX',
-      setPlayHistory: 'SET_PLAY_HISTORY'
     })
   },
   components: {

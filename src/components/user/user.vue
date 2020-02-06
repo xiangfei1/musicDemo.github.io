@@ -24,9 +24,9 @@
       <!-- 收藏列表、播放列表 -->
       <div class="list-wrapper">
         <!-- 收藏列表 -->
-        <Scroll class="list-scroll" v-if="currentIndex === 0">
+        <Scroll class="list-scroll" v-if="currentIndex === 0" :data="favoriteList">
           <div class="list-inner">
-            <SongList></SongList>
+            <SongList  @select="selectSong" :songs="favoriteList"></SongList>
           </div>
         </Scroll>
         <!-- 播放记录列表 -->
@@ -89,7 +89,6 @@ export default {
       if (this.currentIndex === 0) {
         return this.favoriteList.length
       } else {
-        // console.log(this.playHistory.length)
         return this.playHistory.length
       }
     },

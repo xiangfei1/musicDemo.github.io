@@ -8,3 +8,5 @@ export const SET_FULL_SCREEN = 'SET_FULL_SCREEN'    //全屏
 export const SET_PLAYING_STATE = 'SET_PLAYING_STATE'    //播放
 export const SET_PLAY_MODE = 'SET_PLAY_MODE'    //设置播放模式
 export const SET_PLAY_HISTORY = 'SET_PLAY_HISTORY'  //播放历史
+export const SET_FAVORITE_LIST = 'SET_FAVORITE_LIST'    //喜欢的歌曲
+export const SET_SEARCH_HISTORY = 'SET_SEARCH_HISTORY'  //保存搜索历史

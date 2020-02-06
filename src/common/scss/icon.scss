@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'iconfont';  /* project id 1613939 */
-  src: url('//at.alicdn.com/t/font_1613939_fe46udpv71.eot');
-  src: url('//at.alicdn.com/t/font_1613939_fe46udpv71.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_1613939_fe46udpv71.woff2') format('woff2'),
-  url('//at.alicdn.com/t/font_1613939_fe46udpv71.woff') format('woff'),
-  url('//at.alicdn.com/t/font_1613939_fe46udpv71.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_1613939_fe46udpv71.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_1613939_oxz21qdr1ck.eot');
+  src: url('//at.alicdn.com/t/font_1613939_oxz21qdr1ck.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_1613939_oxz21qdr1ck.woff2') format('woff2'),
+  url('//at.alicdn.com/t/font_1613939_oxz21qdr1ck.woff') format('woff'),
+  url('//at.alicdn.com/t/font_1613939_oxz21qdr1ck.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_1613939_oxz21qdr1ck.svg#iconfont') format('svg');
 }
 .iconfont {
   font-family: 'iconfont' !important;
@@ -14,55 +14,60 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.icon-list:before {
+.icon-list::before {
   content: '\e747';
 }
-
-.icon-search:before {
+.icon-search::before {
   content: '\e8b9';
 }
-.icon-back:before {
+.icon-back::before {
   content: '\e755';
 }
-.icon-delete:before {
+.icon-delete::before {
   content: '\e748';
 }
-.icon-listen:before {
+.icon-listen::before {
   content: '\e756';
 }
-.icon-down:before {
+.icon-down::before {
   content: '\e7b2';
 }
-.icon-seq:before {
+.icon-seq::before {
   content: '\e614';
 }
-.icon-loop:before {
+.icon-loop::before {
   content: '\e613';
 }
-.icon-random:before {
+.icon-random::before {
   content: '\e60f';
 }
-.icon-next:before {
+.icon-next::before {
   content: '\e610';
 }
-.icon-prev:before {
+.icon-prev::before {
   content: '\e60d';
 }
-.icon-pause:before {
+.icon-pause::before {
   content: '\e612';
 }
-.icon-play:before {
+.icon-play::before {
   content: '\e60e';
 }
-.icon-like:before {
+.icon-like::before {
   content: '\e611';
 }
-.icon-mini-play:before {
+.icon-del-like::before {
+  content: '\e8ba';
+}
+.icon-mini-play::before {
   content: '\e6b0';
 }
-.icon-mini-stop:before {
+.icon-mini-stop::before {
   content: '\e6ae';
 }
 .icon-no-result::before {
   content: '\e6a9';
+}
+.icon-his-del::before {
+  content: '\e699';
 }

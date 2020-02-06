@@ -1,7 +1,14 @@
 import * as types from './mutations-type'
 import { playMode } from 'common/js/config'
 import { shuffle } from 'common/js/utl'
-import { savePlay } from '../common/js/cache'
+import {
+  savePlay,
+  saveFavorite,
+  deleteFavorite,
+  saveHistory,
+  deleteAllHistory,
+  deleteOneHistory
+} from '../common/js/cache'
 
 function findIndex(list, song) {
   return list.findIndex(item => {
@@ -30,6 +37,15 @@ export const savePlayHistory = function({ commit }, song) {
   commit(types.SET_PLAY_HISTORY, savePlay(song))
 }
 
+// 保存喜欢的歌曲
+export const saveFavoriteList = function({ commit }, song) {
+  commit(types.SET_FAVORITE_LIST, saveFavorite(song))
+}
+// 删除收藏歌曲
+export const deleteFavoriteList = function({ commit }, song) {
+  commit(types.SET_FAVORITE_LIST, deleteFavorite(song))
+}
+
 // 顺序播放全部
 export const sequencePlay = function({ commit }, list) {
   commit(types.SET_SEQUENCE_LIST, list) //顺序播放列表
@@ -42,18 +58,32 @@ export const sequencePlay = function({ commit }, list) {
 
 // 将推荐歌曲插入到播放列表
 export const insertSong = function({ commit, state }, song) {
-  let playList = state.playList   //当前播放列表
-  let currentIndex = state.currentIndex   //当前播放歌曲索引
-  let cIndex = findIndex(playList, song)  //选择的歌曲索引
-  if (cIndex >= 0) {  //判断选择歌曲索引，是否在播放列表中
-    commit(types.SET_CURRENT_INDEX,cIndex)  // 匹配播放歌曲的索引
+  let playList = state.playList //当前播放列表
+  let currentIndex = state.currentIndex //当前播放歌曲索引
+  let cIndex = findIndex(playList, song) //选择的歌曲索引
+  if (cIndex >= 0) {
+    //判断选择歌曲索引，是否在播放列表中
+    commit(types.SET_CURRENT_INDEX, cIndex) // 匹配播放歌曲的索引
   } else {
-    currentIndex++  // 如果不存在，则索引加一
-    playList.splice(currentIndex, 0, song)  // 将选中的歌曲添加到当前索引的下一位
-    commit(types.SET_CURRENT_INDEX,currentIndex)  // 匹配播放歌曲索引
+    currentIndex++ // 如果不存在，则索引加一
+    playList.splice(currentIndex, 0, song) // 将选中的歌曲添加到当前索引的下一位
+    commit(types.SET_CURRENT_INDEX, currentIndex) // 匹配播放歌曲索引
   }
-  commit(types.SET_FULL_SCREEN,true)
-  commit(types.SET_PLAYING_STATE,true)
-  commit(types.SET_PLAY_LIST,playList)
-  commit(types.SET_SEQUENCE_LIST,state.sequenceList)
+  commit(types.SET_FULL_SCREEN, true)
+  commit(types.SET_PLAYING_STATE, true)
+  commit(types.SET_PLAY_LIST, playList)
+  commit(types.SET_SEQUENCE_LIST, state.sequenceList)
+}
+
+// 保存搜索历史
+export const saveSearchHistory = function({ commit }, query) {
+  commit(types.SET_SEARCH_HISTORY, saveHistory(query))
+}
+// 删除所有搜索历史
+export const deleteHistory = function({commit}) {
+  commit(types.SET_SEARCH_HISTORY,deleteAllHistory())
+}
+// 删除指定历史记录
+export const deleteSearchHistory = function({commit},query) {
+  commit(types.SET_SEARCH_HISTORY,deleteOneHistory(query))
 }

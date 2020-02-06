@@ -24,5 +24,4 @@ export function debounce(func,wait){
             func.apply(that,args)
         },wait)
     }
-
 }

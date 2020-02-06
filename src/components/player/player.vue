@@ -84,7 +84,7 @@
               <i class="iconfont icon-next" @click="next"></i>
             </div>
             <div class="icon i-right">
-              <i class="iconfont icon-like"></i>
+              <i class="iconfont" @click="saveFavoriteSong(currentSong)"  :class="changeFavoriteIcon(currentSong)"></i>
             </div>
           </div>
         </div>
@@ -216,7 +216,8 @@ export default {
       'playing',
       'mode',
       'sequenceList',
-      'currentIndex'
+      'currentIndex',
+      'favoriteList',
     ])
   },
   created() {
@@ -413,8 +414,33 @@ export default {
       // console.log(this.currentSong)
       this.setFullScreen(true)
     },
+    // 收藏或者从收藏列表中删除
+    changeFavoriteIcon(song) {
+      if(this.isFavorite(song)) {
+        return 'icon-del-like'
+      } else {
+        return 'icon-like'
+      }
+    },
+    // 判断该歌曲是否已经在收藏列表
+    isFavorite(song) {
+      let index = this.favoriteList.findIndex((item)=>{
+        return item.id === song.id
+      })
+      return index > -1
+    },
+    // 收藏歌曲
+    saveFavoriteSong(song) {
+      if(this.isFavorite(song)) {
+        this.deleteFavoriteList(song)
+      } else {
+        this.saveFavoriteList(song)
+      }
+    },
     ...mapActions([
-      'savePlayHistory'
+      'savePlayHistory',
+      'saveFavoriteList',
+      'deleteFavoriteList'
     ]),
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
@@ -625,6 +651,9 @@ export default {
           }
           &.i-right {
             text-align: left;
+            .icon-del-like {
+              color: red;
+            }
           }
           &.i-center {
             text-align: center;

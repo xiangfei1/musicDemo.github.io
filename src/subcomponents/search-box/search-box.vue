@@ -15,13 +15,16 @@ export default {
     }
   },
   created(){
-      this.$watch('query',debounce((newQuery)=>{
+      this.$watch('query',debounce((newQuery)=>{    //每个300毫秒向父组件传递query中的值
           this.$emit('query',newQuery)
       },300))
   },
   methods: {
       clear(){
           this.query = ''
+      },
+      setQuery(query) {
+        this.query = query
       }
   }
 }

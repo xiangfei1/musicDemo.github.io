@@ -42,7 +42,7 @@ export default {
   .box {
     flex: 1;
     line-height: 25px;
-    background: $color-theme;
+    background: $color-theme-head;
     color: #fff;
     font-size: 14px;
     border: none;

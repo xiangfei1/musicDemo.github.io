@@ -130,9 +130,9 @@ export default {
         this.headerTitle = '歌单'
       }
       if(newY < 0) {
-        this.$refs.header.style.background = `rgba(212, 68, 57, ${percent})`
+        this.$refs.header.style.background = `rgba(85, 170, 255, ${percent})`
       } else {
-        this.$refs.header.style.background = 'rgba(212, 68, 57, 0)'
+        this.$refs.header.style.background = 'rgba(85, 170, 255, 0)'
       }
     }
   },

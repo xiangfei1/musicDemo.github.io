@@ -161,7 +161,7 @@ export default {
     height: 44px;
     display: flex;
     align-items: center;
-    background: $color-theme;
+    background: $color-theme-head;
   }
   .sequence-play {
     position: absolute;

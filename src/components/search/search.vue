@@ -155,10 +155,10 @@ export default {
   width: 100%;
   top: 0;
   bottom: 0;
-  background: $color-background;
+  background: $color-theme;
   .search-box-wrapper {
     padding: 10px 40px 10px 43px;
-    background: $color-theme;
+    background: $color-theme-head;
     .iconfont {
       position: absolute;
       left: 5px;

@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <h1 class="text">我是头部</h1>
+    <h1 class="text">音乐播放器♬</h1>
     <router-link to="/user" class="mine" tag="div">
       <i class="iconfont icon-list"></i>
     </router-link>
@@ -18,7 +18,7 @@ export default {}
 @import 'common/scss/variable.scss';
 .header {
   position: relative;
-  background: $color-theme;
+  background: #55aaff;
   width: 100%;
   height: 44px;
   text-align: center;

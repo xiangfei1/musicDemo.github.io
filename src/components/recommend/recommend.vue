@@ -181,8 +181,8 @@ export default {
     .decorate {
       position: absolute;
       width: 100%;
-      height: 50vh;
-      top: -31vh;
+      height: 50%;
+      top: -20vh;
       z-index: -10;
       background: $color-theme;
       vertical-align: inherit;
